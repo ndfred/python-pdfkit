@@ -2,14 +2,18 @@ python-pdfkit project TODO list
 ===============================
 
 
-Discover PDF Kit
-----------------
+Discover [PDF Kit][]
+--------------------
 
   * get document information
   * optimize a PDF file by re-saving it
   * extract the first page of a PDF file
   * extract thumbnails from pages to JPG or PNG
   * write clean Objective-C class extensions to support these use cases
+  * look into toll-free-bridged [CGPDFDocument][]
+
+[PDF Kit]: http://developer.apple.com/mac/library/documentation/GraphicsImaging/Reference/PDFKit_Ref/index.html
+[CGPDFDocument]: http://developer.apple.com/mac/library/documentation/GraphicsImaging/Reference/CGPDFDocument/Reference/reference.html
 
 
 Write the python code
