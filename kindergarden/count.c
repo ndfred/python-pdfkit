@@ -13,7 +13,7 @@ size_t countDocumentPages(const char *documentPath) {
 		NULL,
 		path,
 		kCFURLPOSIXPathStyle,
-		false
+		0
 	);
 	CGPDFDocumentRef document = CGPDFDocumentCreateWithURL(url);
 
