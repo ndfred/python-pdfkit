@@ -1,0 +1,8 @@
+python-pdfkit
+=============
+
+Python bindings to Apple's [PDF Kit][] framework.
+
+Work in progress.
+
+[PDF Kit]: http://developer.apple.com/cocoa/pdfkit.html
