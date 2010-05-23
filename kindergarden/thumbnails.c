@@ -14,19 +14,8 @@ int generateThumbnails(const char *documentPath) {
 
 	if (document != NULL) {
 		size_t lastPageIndex = CGPDFDocumentGetNumberOfPages(document) + 1;
-		const CGSize thumbnailSize = CGSizeMake(600.0, 800.0);
-		const CGRect thumbnailRect = CGRectMake(
-			0.0, 0.0, thumbnailSize.width, thumbnailSize.height
-		);
+		const CGSize thumbnailSize = CGSizeMake(100.0, 150.0);
 		CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-		CGContextRef context = CGBitmapContextCreate(
-			NULL,
-			thumbnailSize.width, thumbnailSize.height,
-			8, thumbnailSize.width * 4,
-			colorSpace, kCGImageAlphaNoneSkipLast
-		);
-
-		CGContextSetRGBFillColor(context, 1.0, 1.0, 1.0, 1.0);
 
 		for(size_t pageIndex = 1; pageIndex < lastPageIndex; ++pageIndex) {
 			CGPDFPageRef page = CGPDFDocumentGetPage(document, pageIndex);
@@ -40,19 +29,46 @@ int generateThumbnails(const char *documentPath) {
 			CGImageDestinationRef destination = CGImageDestinationCreateWithURL(
 				thumbnailUrl, kUTTypePNG, 1, NULL
 			);
+			const CGSize cropBoxSize = CGPDFPageGetBoxRect(page, kCGPDFCropBox).size;
+			CGRect thumbnailRect = CGRectMake(0.0, 0.0, 0.0, 0.0);
+
+			if (cropBoxSize.height / cropBoxSize.width <
+			    thumbnailSize.height / thumbnailSize.width) {
+				thumbnailRect.size = CGSizeMake(
+					thumbnailSize.width,
+					cropBoxSize.height * thumbnailSize.width / cropBoxSize.width
+				);
+			} else {
+				thumbnailRect.size = CGSizeMake(
+					cropBoxSize.width * thumbnailSize.height / cropBoxSize.height,
+					thumbnailSize.height
+				);
+			}
+
+			thumbnailRect = CGRectIntegral(thumbnailRect);
+
 			CGAffineTransform transform = CGPDFPageGetDrawingTransform(
-				page, kCGPDFMediaBox, thumbnailRect, 0, 1
+				page, kCGPDFCropBox, thumbnailRect, 0, 0
 			);
+
+			CGContextRef context = CGBitmapContextCreate(
+				NULL,
+				thumbnailRect.size.width, thumbnailRect.size.height,
+				8, thumbnailRect.size.width * 4,
+				colorSpace, kCGImageAlphaNoneSkipLast
+			);
+
+			CGContextSetRGBFillColor(context, 1.0, 1.0, 1.0, 1.0);
 
 			printf("Creating thumbnail for page %lu\n", pageIndex);
 			CGContextFillRect(context, thumbnailRect);
 			CGContextConcatCTM(context, transform);
 			CGContextDrawPDFPage(context, page);
-			CGContextConcatCTM(context, CGAffineTransformInvert(transform));
 			image = CGBitmapContextCreateImage(context);
 			CGImageDestinationAddImage(destination, image, NULL);
 			CGImageDestinationFinalize(destination);
 
+			CGContextRelease(context);
 			if (destination != NULL) CFRelease(destination);
 			if (image != NULL) CFRelease(image);
 			if (thumbnailUrl != NULL) CFRelease(thumbnailUrl);
@@ -60,7 +76,6 @@ int generateThumbnails(const char *documentPath) {
 		}
 
 		CGColorSpaceRelease(colorSpace);
-		CGContextRelease(context);
 		CGPDFDocumentRelease(document);
 	} else {
 		fprintf(stderr, "Cannot open PDF document\n");
