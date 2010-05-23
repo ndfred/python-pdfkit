@@ -11,9 +11,11 @@ Discover [PDF Kit][]
   * extract thumbnails from pages to JPG or PNG
   * write clean Objective-C class extensions to support these use cases
   * look into toll-free-bridged [CGPDFDocument][]
+  * look into [Quartz 2D python bindings][]
 
 [PDF Kit]: http://developer.apple.com/mac/library/documentation/GraphicsImaging/Reference/PDFKit_Ref/index.html
 [CGPDFDocument]: http://developer.apple.com/mac/library/documentation/GraphicsImaging/Reference/CGPDFDocument/Reference/reference.html
+[Quartz 2D python bindings]: http://developer.apple.com/iphone/library/documentation/GraphicsImaging/Conceptual/drawingwithquartz2d/dq_python/dq_python.html
 
 
 Write the python code
