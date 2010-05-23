@@ -1,0 +1,59 @@
+Discover PDF Kit
+----------------
+
+  * get document information
+  * optimize a PDF file by re-saving it
+  * extract the first page of a PDF file
+  * extract thumbnails from pages to JPG or PNG
+  * write clean Objective-C class extensions to support these use cases
+
+
+Write the python code
+---------------------
+
+  * write a document class
+  * write a page class
+  * write a (use name it) class
+
+
+Discover python bindings
+------------------------
+
+  * look into [python C bindings][]
+  * look into [PyObjC][] Objective-C bindings
+  * bind the previous test scripts
+  * bind the classes to native code
+
+[python C bindings]: http://docs.python.org/c-api
+[PyObjC]: http://pyobjc.sourceforge.net
+
+
+Test it
+-------
+
+  * get a set of PDF files
+  * well... test it all
+  * run [pylint][]
+
+[pylint]: http://www.logilab.org/857
+
+
+Document it
+-----------
+
+  * link to the dependancies documentations (PDF Kit, PyObjC,...)
+  * in-code documentation
+  * find a good-looking documentation generator
+  * write samples (see if tests can fit)
+
+
+Package and publish the code
+----------------------------
+
+  * read [The Hitchhiker’s Guide to Packaging][]
+  * block everything other than Mac OS X
+  * look into [PyPI][] publication
+  * see if the [PyObjC][] is interested
+
+[The Hitchhiker’s Guide to Packaging]: http://guide.python-distribute.org
+[PyPI]: http://pypi.python.org
