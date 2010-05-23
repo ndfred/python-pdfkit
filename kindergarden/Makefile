@@ -2,6 +2,7 @@ CFLAGS:=-g -Wall -Wextra -pedantic -std=c99
 CC:=gcc $(CFLAGS)
 
 all: count thumbnails
+test: test-count test-thumbnails
 
 %.o: %.c
 	$(CC) -c $<
@@ -22,7 +23,7 @@ PDFKitGuide.pdf:
 	curl http://developer.apple.com/mac/library/documentation/GraphicsImaging/Conceptual/PDFKitGuide/PDFKitGuide.pdf -o PDFKitGuide.pdf
 
 clean:
-	rm -f count count.o thumbnails thumbnails.o
+	rm -f count count.o thumbnails thumbnails.o *.png
 
 distclean: clean
 	rm -f PDFKitGuide.pdf
