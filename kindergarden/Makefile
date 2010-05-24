@@ -1,8 +1,8 @@
 CFLAGS:=-g -Wall -Wextra -pedantic -std=c99
 CC:=gcc $(CFLAGS)
 
-all: count thumbnails extract
-test: test-count test-thumbnails test-extract
+all: count thumbnails extract compress
+test: test-count test-thumbnails test-extract test-compress
 
 %.o: %.c
 	$(CC) -c $<
@@ -24,6 +24,12 @@ extract: extract.o
 
 test-extract: extract PDFKitGuide.pdf
 	./extract PDFKitGuide.pdf
+
+compress: compress.o
+	$(CC) -framework Foundation -framework ApplicationServices $^ -o $@
+
+test-compress: compress PDFKitGuide.pdf
+	./compress PDFKitGuide.pdf
 
 PDFKitGuide.pdf:
 	curl http://developer.apple.com/mac/library/documentation/GraphicsImaging/Conceptual/PDFKitGuide/PDFKitGuide.pdf -o PDFKitGuide.pdf
