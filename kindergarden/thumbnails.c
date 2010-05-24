@@ -14,7 +14,7 @@ int generateThumbnails(const char *documentPath) {
 
 	if (document != NULL) {
 		size_t lastPageIndex = CGPDFDocumentGetNumberOfPages(document) + 1;
-		const CGSize thumbnailSize = CGSizeMake(100.0, 150.0);
+		const CGSize thumbnailSize = CGSizeMake(600.0, 800.0);
 		CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
 
 		for(size_t pageIndex = 1; pageIndex < lastPageIndex; ++pageIndex) {
@@ -29,7 +29,8 @@ int generateThumbnails(const char *documentPath) {
 			CGImageDestinationRef destination = CGImageDestinationCreateWithURL(
 				thumbnailUrl, kUTTypePNG, 1, NULL
 			);
-			const CGSize cropBoxSize = CGPDFPageGetBoxRect(page, kCGPDFCropBox).size;
+			const CGRect cropBox = CGPDFPageGetBoxRect(page, kCGPDFCropBox);
+			const CGSize cropBoxSize = cropBox.size;
 			CGRect thumbnailRect = CGRectMake(0.0, 0.0, 0.0, 0.0);
 
 			if (cropBoxSize.height / cropBoxSize.width <
@@ -47,9 +48,13 @@ int generateThumbnails(const char *documentPath) {
 
 			thumbnailRect = CGRectIntegral(thumbnailRect);
 
-			CGAffineTransform transform = CGPDFPageGetDrawingTransform(
-				page, kCGPDFCropBox, thumbnailRect, 0, 0
+			CGAffineTransform transform = CGAffineTransformMakeTranslation(
+				- cropBox.origin.x, - cropBox.origin.y
 			);
+			transform = CGAffineTransformConcat(transform, CGAffineTransformMakeScale(
+				thumbnailRect.size.width / cropBoxSize.width,
+				thumbnailRect.size.height / cropBoxSize.height
+			));
 
 			CGContextRef context = CGBitmapContextCreate(
 				NULL,
